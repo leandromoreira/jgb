@@ -3,6 +3,15 @@ jgb
 
 gameboy emulator written in JS
 
+Development
+===
+
+```shell
+$ git clone https://github.com/leandromoreira/jgb.git
+$ cd jbg
+$ open SpecRunner.html #to run all the tests.
+```
+
 Technical specs
 ===
 ```
