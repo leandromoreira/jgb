@@ -1,6 +1,14 @@
 describe("LR35902", function() {
-  it("has program counter", function() {
-    var cpu = new jgb.LR35902()
-    expect(cpu.PC).toEqual(0x0000);
+  var cpu
+
+  beforeEach(function () {
+    cpu = new jgb.LR35902(new jgb.MMU())
+  });
+
+  it("does NOP", function() {
+    cpu.memory.writeByte(0x0000, 00)
+    cpu.step()
+
+    expect(cpu.pc).toEqual(0x0001);
   });
 });
