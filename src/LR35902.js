@@ -3,6 +3,7 @@ var jgb = jgb || {}
 jgb.LR35902 = function(memory){
   this.pc = 0x0000
   this.memory = memory
+  this.assemblerLine = null
 
   this.opCodes = [
     //NOP
@@ -17,6 +18,7 @@ jgb.LR35902 = function(memory){
     var instruction = this.opCodes[opCode]
 
     instruction.exec()
+    this.assemblerLine = instruction.mnemonic
 
     this.pc += instruction.size
   }
