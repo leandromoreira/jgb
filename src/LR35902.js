@@ -32,19 +32,19 @@ jgb.LR35902 = function(memory){
   this.opCodes[0x00] =
     //NOP
     {
-      mnemonic: mnemonic("NOP"), size: oneByte, cycles: cycles(4), exec: doNothing
+      mnemonic: mnemonic("NOP"), jumpsTo: oneByte, cycles: cycles(4), exec: doNothing
     }
   this.opCodes[0x10] =
     //STOP
     {
-      mnemonic: mnemonic("STOP"), size: twoBytes, cycles: cycles(12), exec: doNothing
+      mnemonic: mnemonic("STOP"), jumpsTo: twoBytes, cycles: cycles(12), exec: doNothing
     }
 
   // ############ LD xx, immediate
   this.opCodes[0x01] =
     //LD BC, 0xXXXX
     {
-      mnemonic: function(){return "LD BC, "+this.arg}, size: threeBytes, cycles: cycles(12),
+      mnemonic: function(){return "LD BC, "+this.arg}, jumpsTo: threeBytes, cycles: cycles(12),
       exec: function(){
         var nextWord = self.memory.readWord(self.pc + 1)
         self.b = self.bin.firstByteFrom(nextWord)
@@ -55,7 +55,7 @@ jgb.LR35902 = function(memory){
   this.opCodes[0x11] =
     //LD DE, 0xXXXX
     {
-      mnemonic: function(){return "LD DE, "+this.arg}, size: threeBytes, cycles: cycles(12),
+      mnemonic: function(){return "LD DE, "+this.arg}, jumpsTo: threeBytes, cycles: cycles(12),
       exec: function(){
         var nextWord = self.memory.readWord(self.pc + 1)
         self.d = self.bin.firstByteFrom(nextWord)
@@ -66,7 +66,7 @@ jgb.LR35902 = function(memory){
   this.opCodes[0x21] =
     //LD HL, 0xXXXX
     {
-      mnemonic: function(){return "LD HL, "+this.arg}, size: threeBytes, cycles: cycles(12),
+      mnemonic: function(){return "LD HL, "+this.arg}, jumpsTo: threeBytes, cycles: cycles(12),
       exec: function(){
         var nextWord = self.memory.readWord(self.pc + 1)
         self.h = self.bin.firstByteFrom(nextWord)
@@ -78,7 +78,7 @@ jgb.LR35902 = function(memory){
   this.opCodes[0x31] =
     //LD SP, 0xXXXX
     {
-      mnemonic: function(){return "LD SP, "+this.arg}, size: threeBytes, cycles: cycles(12),
+      mnemonic: function(){return "LD SP, "+this.arg}, jumpsTo: threeBytes, cycles: cycles(12),
       exec: function(){
         var nextWord = self.memory.readWord(self.pc + 1)
         self.sp = nextWord
@@ -93,7 +93,7 @@ jgb.LR35902 = function(memory){
     instruction.exec()
     this.assemblerLine = instruction.mnemonic()
 
-    this.pc += instruction.size()
+    this.pc += instruction.jumpsTo()
     this.cycles += instruction.cycles()
   }
 }
