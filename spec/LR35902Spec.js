@@ -23,18 +23,15 @@ describe("LR35902", function() {
   });
 
   it("counts cycles per instruction", function() {
-    cpu.memory.writeByte(0x0000, 01)
+    cpu.memory.writeByte(0x0000, 0x1)
     cpu.memory.writeByte(0x0001, 0xAA)
     cpu.memory.writeByte(0x0002, 0xFF)
+    cpu.memory.writeByte(0x0003, 0x0)
 
     cpu.step()
-
-    expect(cpu.cycles).toEqual(12);
-
-    cpu.pc = 0x0000
     cpu.step()
 
-    expect(cpu.cycles).toEqual(24);
+    expect(cpu.cycles).toEqual(16);
   });
 
   it("does NOP", function() {
