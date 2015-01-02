@@ -1,9 +1,10 @@
 var jgb = jgb || {}
 
-jgb.Gameboy = function(){
-  this.memory = new MMU()
-  this.cpu = new LR35902()
+jgb.Gameboy = function(romByteArray){
+  this.rom = new jgb.Rom(romByteArray)
+  this.memory = new jgb.MMU()
+  this.cpu = new jgb.LR35902()
   this.cpu.memory = this.memory
 
-  this.start = function(){//loop}
+  this.start = function(){}
 }
