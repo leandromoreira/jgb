@@ -26,6 +26,8 @@ jgb.Rom = function(byteArray){
     return licenseCode.trim() === "" ? String.fromCharCode(byteArray[0x014B]) : licenseCode.trim();
   })()
 
+  this.cartridgeTypeId = byteArray[0x0147]
+
   this.cartridgeType = (function(){
     var types = []
     types[0x00]="ROM ONLY"

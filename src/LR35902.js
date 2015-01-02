@@ -5,6 +5,7 @@ jgb.LR35902 = function(memory){
 
   this.bin = new jgb.Binary()
   this.cycles = 0
+  this.speed = 4194304
 
   //### LR35902 registers ###
   this.pc = 0x0000
