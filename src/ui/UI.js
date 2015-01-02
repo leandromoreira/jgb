@@ -5,6 +5,10 @@ jgb.FillInfo = function(){
   var romInfoHtml = "<b>Title:</b> " + romInfo.title
   romInfoHtml += "<br><b>Type:</b> " + romInfo.cartridgeType
   romInfoHtml += "<br><b>Size:</b> " + romInfo.size
+  romInfoHtml += "<br><b>Checksum:</b> " + romInfo.globalChecksum
+  romInfoHtml += "<br><b>Manufacturer:</b> " + romInfo.manufacturer
+  $("#rom-info").empty()
+  alert(romInfo.rawRom[0x100])
   $("#rom-info").append(romInfoHtml)
 }
 
