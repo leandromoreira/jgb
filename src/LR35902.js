@@ -46,10 +46,9 @@ jgb.LR35902 = function(memory){
     {
       mnemonic: function(){return "LD BC, "+this.arg}, jumpsTo: threeBytes, cycles: cycles(12),
       exec: function(){
-        var nextWord = self.memory.readWord(self.pc + 1)
-        self.b = self.bin.firstByteFrom(nextWord)
-        self.c = self.bin.secondByteFrom(nextWord)
-        this.arg = self.bin.toHexa(nextWord)
+        this.arg = self.bin.toHexa(self.memory.readWord(self.pc + 1))
+        self.c = self.memory.readByte(self.pc+1)
+        self.b = self.memory.readByte(self.pc+2)
       }
     }
   this.opCodes[0x11] =
@@ -57,10 +56,9 @@ jgb.LR35902 = function(memory){
     {
       mnemonic: function(){return "LD DE, "+this.arg}, jumpsTo: threeBytes, cycles: cycles(12),
       exec: function(){
-        var nextWord = self.memory.readWord(self.pc + 1)
-        self.d = self.bin.firstByteFrom(nextWord)
-        self.e = self.bin.secondByteFrom(nextWord)
-        this.arg = self.bin.toHexa(nextWord)
+        this.arg = self.bin.toHexa(self.memory.readWord(self.pc + 1))
+        self.e = self.memory.readByte(self.pc+1)
+        self.d = self.memory.readByte(self.pc+2)
       }
     }
   this.opCodes[0x21] =
@@ -68,10 +66,9 @@ jgb.LR35902 = function(memory){
     {
       mnemonic: function(){return "LD HL, "+this.arg}, jumpsTo: threeBytes, cycles: cycles(12),
       exec: function(){
-        var nextWord = self.memory.readWord(self.pc + 1)
-        self.h = self.bin.firstByteFrom(nextWord)
-        self.l = self.bin.secondByteFrom(nextWord)
-        this.arg = self.bin.toHexa(nextWord)
+        this.arg = self.bin.toHexa(self.memory.readWord(self.pc + 1))
+        self.l = self.memory.readByte(self.pc+1)
+        self.h = self.memory.readByte(self.pc+2)
       }
     }
 
