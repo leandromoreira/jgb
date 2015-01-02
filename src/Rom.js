@@ -21,7 +21,7 @@ jgb.Rom = function(byteArray){
   this.licenseCode = (function(){
     var licenseCode = ""
     for(var address = 0x0144; address <= 0x0145 ; address++){
-      licenseCode += String.fromCharCode(byteArray[address])
+      licenseCode += byteArray[address].toString()
     }
     return licenseCode.trim() === "" ? String.fromCharCode(byteArray[0x014B]) : licenseCode.trim();
   })()
@@ -58,5 +58,43 @@ jgb.Rom = function(byteArray){
     types[0xFE]="HuC3"
     types[0xFF]="HuC1+RAM+BATTERY"
     return types[byteArray[0x0147]]
+  })()
+
+  this.size = (function(){
+    var types = []
+    types[0x00] = "32KByte"
+    types[0x01] = "64KByte"
+    types[0x02] = "128KByte"
+    types[0x03] = "256KByte"
+    types[0x04] = "512KByte"
+    types[0x05] = "1MByte"
+    types[0x06] = "2MByte"
+    types[0x07] = "4MByte"
+    types[0x52] = "1.1MByte"
+    types[0x53] = "1.2MByte"
+    types[0x54] = "1.5MByte"
+    return types[byteArray[0x0148]]
+  })()
+
+  this.ramSize = (function(){
+    var types = []
+    types[0x00] = "None"
+    types[0x01] = "2KByte"
+    types[0x02] = "8KByte"
+    types[0x03] = "32KByte"
+    return types[byteArray[0x0149]]
+  })()
+
+  this.ramVersion = (function(){
+    return byteArray[0x014C].toString()
+  })()
+
+  this.headerChecksum = (function(){
+    return byteArray[0x014D]
+  })()
+
+  this.globalChecksum = (function(){
+    var bin = new jgb.Binary()
+    return bin.wordFrom(byteArray[0x014E], byteArray[0x014F])
   })()
 }
