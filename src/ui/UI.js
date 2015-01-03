@@ -8,7 +8,6 @@ jgb.FillInfo = function(){
   romInfoHtml += "<br><b>Checksum:</b> " + romInfo.globalChecksum
   romInfoHtml += "<br><b>Manufacturer:</b> " + romInfo.manufacturer
   $("#rom-info").empty()
-  alert(romInfo.rawRom[0x100])
   $("#rom-info").append(romInfoHtml)
 }
 
