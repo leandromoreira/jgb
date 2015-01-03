@@ -14,8 +14,8 @@ describe("MMU", function() {
   });
 
   it("writes/reads a word", function() {
-    mmu.writeWord(0x0010, 0xCAFE)
-    var fromMemory = mmu.readWord(0x0010)
+    mmu.writeWord(mmu.WRAM_BANK0_START+0x0010, 0xCAFE)
+    var fromMemory = mmu.readWord(mmu.WRAM_BANK0_START+0x0010)
     expect(fromMemory).toEqual(0xCAFE);
   });
 

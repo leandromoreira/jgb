@@ -22,11 +22,13 @@ jgb.MMU = function(memoryBankControllers){
   }
 
   this.writeWord = function(address, word) {
-    memory[address] = bin.secondByteFrom(word)
-    memory[address+1] = bin.firstByteFrom(word)
+    this.writeByte(address, bin.secondByteFrom(word))
+    this.writeByte(address+1, bin.firstByteFrom(word))
   }
 
-  this.readWord = function(address){ return bin.wordFrom(memory[address], memory[address+1]) }
+  this.readWord = function(address) {
+    return bin.wordFrom(this.readByte(address), this.readByte(address+1))
+  }
 
   this.reset = function(){ memory = new Uint8Array(0xFFFF + 1) }
 
