@@ -10,14 +10,14 @@ jgb.LR35902 = function(memory){
   //### LR35902 registers ###
   this.pc = 0x0000
   this.sp = 0x0000
-  this.a = 0x0000 //accumulator
-  this.b = 0x0000
-  this.c = 0x0000
-  this.d = 0x0000
-  this.e = 0x0000
-  this.f = 0x0000 //flag
-  this.h = 0x0000
-  this.l = 0x0000
+  this.a = 0x00 //accumulator
+  this.b = 0x00
+  this.c = 0x00
+  this.d = 0x00
+  this.e = 0x00
+  this.f = 0x00 //flag
+  this.h = 0x00
+  this.l = 0x00
   //###
   this.memory = memory
   this.assemblerLine = null
@@ -28,6 +28,17 @@ jgb.LR35902 = function(memory){
   var cycles = function(number){return function(){return number}}
   var mnemonic = function(assemble){return function(){return assemble}}
   var doNothing = function(){}
+
+  this.step = function(){
+    var opCode = this.memory.readByte(this.pc)
+    var instruction = this.opCodes[opCode]
+
+    instruction.exec()
+    this.assemblerLine = instruction.mnemonic()
+
+    this.pc += instruction.jumpsTo()
+    this.cycles += instruction.cycles()
+  }
 
   this.opCodes = []
   this.opCodes[0x00] =
@@ -84,15 +95,49 @@ jgb.LR35902 = function(memory){
       }
     }
 
-  this.step = function(){
-    var opCode = this.memory.readByte(this.pc)
-    var instruction = this.opCodes[opCode]
+  //################ LD (xx), A
+  this.opCodes[0x02] =
+    //LD (BC), A
+    {
+      mnemonic: mnemonic("LD (BC), A"), jumpsTo: oneByte, cycles: cycles(8),
+      exec: function(){
+        self.memory.writeByte(self.bin.wordFrom(self.b, self.c), self.a)
+      }
+    }
 
-    instruction.exec()
-    this.assemblerLine = instruction.mnemonic()
+  this.opCodes[0x12] =
+    //LD (DE), A
+    {
+      mnemonic: mnemonic("LD (DE), A"), jumpsTo: oneByte, cycles: cycles(8),
+      exec: function(){
+        self.memory.writeByte(self.bin.wordFrom(self.d, self.e), self.a)
+      }
+    }
 
-    this.pc += instruction.jumpsTo()
-    this.cycles += instruction.cycles()
-  }
+  this.opCodes[0x22] =
+    //LD (HL+), A
+    {
+      mnemonic: mnemonic("LD (HL+), A"), jumpsTo: oneByte, cycles: cycles(8),
+      exec: function(){
+        var hl = self.bin.wordFrom(self.l, self.h)
+        self.memory.writeByte(hl, self.a)
+        hl = (hl + 1) & 0xFFFF
+        self.h = self.bin.firstByteFrom(hl)
+        self.l = self.bin.secondByteFrom(hl)
+      }
+    }
+
+  this.opCodes[0x32] =
+    //LD (HL-), A
+    {
+      mnemonic: mnemonic("LD (HL-), A"), jumpsTo: oneByte, cycles: cycles(8),
+      exec: function(){
+        var hl = self.bin.wordFrom(self.l, self.h)
+        self.memory.writeByte(hl, self.a)
+        hl = (hl - 1) & 0xFFFF
+        self.h = self.bin.firstByteFrom(hl)
+        self.l = self.bin.secondByteFrom(hl)
+      }
+    }
 }
 

@@ -56,4 +56,28 @@ describe("LR35902", function() {
     expect(cpu.b).toEqual(0xFF);
     expect(cpu.c).toEqual(0xAA);
   });
+
+  it("does LD (BC), A", function() {
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x02)
+    cpu.b = 0xAA
+    cpu.c = 0xFF
+    cpu.a = 0xED
+
+    cpu.step()
+
+    expect(cpu.memory.readByte(0xFFAA)).toEqual(0xED);
+  });
+
+  it("LD (HL+), A", function() {
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x22)
+    cpu.l = 0xAA
+    cpu.h = 0xFF
+    cpu.a = 0x15
+
+    cpu.step()
+
+    expect(cpu.memory.readByte(0xFFAA)).toEqual(0x15);
+    expect(cpu.h).toEqual(0xFF);
+    expect(cpu.l).toEqual(0xAB);
+  });
 });
