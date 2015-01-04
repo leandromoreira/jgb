@@ -35,6 +35,7 @@ References
 ===
 
 *  [Nocash gb hardware documentation.](http://problemkaputt.de/pandocs.htm)
+*  [Complete documentation (pdf)](http://marc.rawer.de/Gameboy/Docs/GBCPUman.pdf)
 *  [Cpu LR35902 opcodes](http://www.pastraiser.com/cpu/gameboy/gameboy_opcodes.html)
 *  [Tech demos/roms with source code.](http://www.opusgames.com/games/GBDev/GBDev.html)
 *  [General demos and gb development soft/hard.](http://gbdev.gg8.se/)
