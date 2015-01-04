@@ -65,7 +65,7 @@ describe("LR35902", function() {
 
     cpu.step()
 
-    expect(cpu.memory.readByte(0xFFAA)).toEqual(0xED);
+    expect(cpu.memory.readByte(0xAAFF)).toEqual(0xED);
   });
 
   it("LD (HL+), A", function() {

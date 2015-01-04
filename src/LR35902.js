@@ -101,7 +101,7 @@ jgb.LR35902 = function(memory){
     {
       mnemonic: mnemonic("LD (BC), A"), jumpsTo: oneByte, cycles: cycles(8),
       exec: function(){
-        self.memory.writeByte(self.bin.wordFrom(self.b, self.c), self.a)
+        self.memory.writeByte(self.bin.wordFrom(self.c, self.b), self.a)
       }
     }
 
@@ -110,7 +110,7 @@ jgb.LR35902 = function(memory){
     {
       mnemonic: mnemonic("LD (DE), A"), jumpsTo: oneByte, cycles: cycles(8),
       exec: function(){
-        self.memory.writeByte(self.bin.wordFrom(self.d, self.e), self.a)
+        self.memory.writeByte(self.bin.wordFrom(self.e, self.d), self.a)
       }
     }
 
