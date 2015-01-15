@@ -139,5 +139,17 @@ jgb.LR35902 = function(memory){
         self.l = self.bin.secondByteFrom(hl)
       }
     }
+
+  //################ INC
+  this.opCodes[0x03] =
+    //INC BC
+    {
+      mnemonic: mnemonic("INC BC"), jumpsTo: oneByte, cycles: cycles(8),
+      exec: function(){
+        var bc = (self.bin.wordFrom(self.c, self.b) + 1) & 0xFFFF
+        self.b = self.bin.firstByteFrom(bc)
+        self.c = self.bin.secondByteFrom(bc)
+      }
+    }
 }
 

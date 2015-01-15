@@ -80,4 +80,15 @@ describe("LR35902", function() {
     expect(cpu.h).toEqual(0xFF);
     expect(cpu.l).toEqual(0xAB);
   });
+
+  it("INC BC", function() {
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x03)
+    cpu.b = 0xAA
+    cpu.c = 0xFF
+    // bc = 0xAAFF (0xAAFF + 1 = 0xAB00)
+    cpu.step()
+
+    expect(cpu.b).toEqual(0xAB);
+    expect(cpu.c).toEqual(0x00);
+  });
 });
