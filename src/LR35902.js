@@ -18,7 +18,16 @@ jgb.LR35902 = function(memory){
   this.f = 0x00 //flag
   this.h = 0x00
   this.l = 0x00
+  //Flags
+  this.flagZero = 0
+  this.flagCarry = 0
+  this.flagHalfCarry = 0
+  this.flagSubtract = 0
   //###
+
+  var checkFlagZero = function(v){self.flagZero = (v === 0x0)? 0x1 : 0x0}
+  var checkFlagHalfCarry = function(v){self.flagHalfCarry = ((v & 0xF) == 0) ? 0x1 : 0x0}
+
   this.memory = memory
   this.assemblerLine = null
 
@@ -180,6 +189,104 @@ jgb.LR35902 = function(memory){
       mnemonic: mnemonic("INC SP"), jumpsTo: oneByte, cycles: cycles(8),
       exec: function(){
         self.sp = (self.sp + 1) & 0xFFFF
+      }
+    }
+
+  this.opCodes[0x04] =
+    //INC B
+    {
+      mnemonic: mnemonic("INC B"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.b = (self.b + 1) & 0xFF
+        self.flagSubtract = 0x0
+        checkFlagHalfCarry(self.b)
+        checkFlagZero(self.b)
+      }
+    }
+
+  this.opCodes[0x14] =
+    //INC D
+    {
+      mnemonic: mnemonic("INC D"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.d = (self.d + 1) & 0xFF
+        self.flagSubtract = 0x0
+        checkFlagHalfCarry(self.d)
+        checkFlagZero(self.d)
+      }
+    }
+
+  this.opCodes[0x24] =
+    //INC H
+    {
+      mnemonic: mnemonic("INC H"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.h = (self.h + 1) & 0xFF
+        self.flagSubtract = 0x0
+        checkFlagHalfCarry(self.h)
+        checkFlagZero(self.h)
+      }
+    }
+
+  this.opCodes[0x34] =
+    //INC (HL)
+    {
+      mnemonic: mnemonic("INC (HL)"), jumpsTo: oneByte, cycles: cycles(12),
+      exec: function(){
+        var v = ((self.memory.readByte(self.bin.wordFrom(self.l, self.h)) + 1 ) & 0xFF)
+        self.memory.writeByte(self.bin.wordFrom(self.l, self.h), v)
+
+        self.flagSubtract = 0x0
+        checkFlagHalfCarry(v)
+        checkFlagZero(v)
+      }
+    }
+
+  this.opCodes[0x0C] =
+    //INC C
+    {
+      mnemonic: mnemonic("INC C"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.c = (self.c + 1) & 0xFF
+        self.flagSubtract = 0x0
+        checkFlagHalfCarry(self.c)
+        checkFlagZero(self.c)
+      }
+    }
+
+  this.opCodes[0x1C] =
+    //INC E
+    {
+      mnemonic: mnemonic("INC E"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.e = (self.e + 1) & 0xFF
+        self.flagSubtract = 0x0
+        checkFlagHalfCarry(self.e)
+        checkFlagZero(self.e)
+      }
+    }
+
+  this.opCodes[0x2C] =
+    //INC L
+    {
+      mnemonic: mnemonic("INC L"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.l = (self.l + 1) & 0xFF
+        self.flagSubtract = 0x0
+        checkFlagHalfCarry(self.l)
+        checkFlagZero(self.l)
+      }
+    }
+
+  this.opCodes[0x3C] =
+    //INC A
+    {
+      mnemonic: mnemonic("INC A"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.a = (self.a + 1) & 0xFF
+        self.flagSubtract = 0x0
+        checkFlagHalfCarry(self.a)
+        checkFlagZero(self.a)
       }
     }
 }

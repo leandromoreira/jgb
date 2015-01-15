@@ -91,4 +91,36 @@ describe("LR35902", function() {
     expect(cpu.b).toEqual(0xAB);
     expect(cpu.c).toEqual(0x00);
   });
+
+  it("INC B", function() {
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x04)
+    cpu.b = 0xAA
+
+    cpu.step()
+
+    expect(cpu.b).toEqual(0xAB);
+    expect(cpu.flagZero).toEqual(0x0);
+    expect(cpu.flagSubtract).toEqual(0x0);
+    expect(cpu.flagHalfCarry).toEqual(0x0);
+
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0001, 0x04)
+    cpu.b = 0xFF
+
+    cpu.step()
+
+    expect(cpu.b).toEqual(0x00);
+    expect(cpu.flagZero).toEqual(0x1);
+    expect(cpu.flagHalfCarry).toEqual(0x1);
+  });
+
+  it("INC (HL)", function() {
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x34)
+    cpu.memory.writeByte(0xC0AA, 0x1)
+    cpu.h = 0xC0
+    cpu.l = 0xAA
+
+    cpu.step()
+
+    expect(cpu.memory.readByte(0xC0AA)).toEqual(0x2);
+  });
 });
