@@ -151,5 +151,36 @@ jgb.LR35902 = function(memory){
         self.c = self.bin.secondByteFrom(bc)
       }
     }
+
+  this.opCodes[0x13] =
+    //INC DE
+    {
+      mnemonic: mnemonic("INC DE"), jumpsTo: oneByte, cycles: cycles(8),
+      exec: function(){
+        var de = (self.bin.wordFrom(self.e, self.d) + 1) & 0xFFFF
+        self.d = self.bin.firstByteFrom(de)
+        self.e = self.bin.secondByteFrom(de)
+      }
+    }
+
+  this.opCodes[0x23] =
+    //INC HL
+    {
+      mnemonic: mnemonic("INC HL"), jumpsTo: oneByte, cycles: cycles(8),
+      exec: function(){
+        var hl = (self.bin.wordFrom(self.l, self.h) + 1) & 0xFFFF
+        self.h = self.bin.firstByteFrom(hl)
+        self.l = self.bin.secondByteFrom(hl)
+      }
+    }
+
+  this.opCodes[0x33] =
+    //INC SP
+    {
+      mnemonic: mnemonic("INC SP"), jumpsTo: oneByte, cycles: cycles(8),
+      exec: function(){
+        self.sp = (self.sp + 1) & 0xFFFF
+      }
+    }
 }
 
