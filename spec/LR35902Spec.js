@@ -133,4 +133,46 @@ describe("LR35902", function() {
     expect(cpu.b).toEqual(0xA9);
     expect(cpu.flagSubtract).toEqual(0x1);
   });
+
+  it("LD B,d8", function() {
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x06)
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0001, 0xBB)
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0002, 0x06)
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0003, 0xCC)
+    cpu.b = 0xAA
+
+    cpu.step()
+
+    expect(cpu.b).toEqual(0xBB);
+    expect(cpu.assemblerLine).toEqual("LD B, 187");
+
+    cpu.step()
+
+    expect(cpu.b).toEqual(0xCC);
+    expect(cpu.assemblerLine).toEqual("LD B, 204");
+  });
+
+  it("LD D,d8", function() {
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x16)
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0001, 0xBC)
+    cpu.d = 0xAA
+
+    cpu.step()
+
+    expect(cpu.d).toEqual(0xBC);
+    expect(cpu.assemblerLine).toEqual("LD D, 188");
+  });
+
+  it("LD (HL),d8", function() {
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x36)
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0001, 0xFA)
+    cpu.h = 0xAA
+    cpu.l = 0x11
+
+    expect(cpu.memory.readByte(0xAA11)).toEqual(0x00);
+
+    cpu.step()
+
+    expect(cpu.memory.readByte(0xAA11)).toEqual(0xFA);
+  });
 });

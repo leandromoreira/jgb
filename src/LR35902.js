@@ -429,5 +429,36 @@ jgb.LR35902 = function(memory){
         self.sp = (self.sp - 1) & 0xFFFF
       }
     }
-}
 
+  //LOAD X,d8
+  var loadXd8Instructions = [
+    {opcode: 0x06, r: "B"}, {opcode: 0x16, r: "D"}, {opcode: 0x26, r: "H"},
+    {opcode: 0x0E, r: "C"}, {opcode: 0x1E, r: "E"}, {opcode: 0x2E, r: "L"},
+    {opcode: 0x3E, r: "A"}
+  ]
+
+  for (var index = 0; index < loadXd8Instructions.length; ++index) {
+    (function(instruction){
+      self.opCodes[instruction.opcode] = {
+        mnemonic: function(){return "LD " + instruction.r + ", " + instruction.arg}, jumpsTo: twoBytes, cycles: cycles(8),
+        exec: function(){
+          instruction.arg = self.memory.readByte(self.pc+1)
+          self[instruction.r.toLowerCase()] = instruction.arg  & 0xFF
+        }
+      }
+    })(loadXd8Instructions[index])
+  }
+
+  this.opCodes[0x36] =
+    //LD (HL), d8
+    {
+      mnemonic: function(){return "LD (HL), " + this.arg}, jumpsTo: twoBytes, cycles: cycles(12),
+      exec: function(){
+        var hl = self.bin.wordFrom(self.l, self.h)
+        this.arg = self.memory.readByte(self.pc+1)
+        self.memory.writeByte(hl, this.arg)
+      }
+    }
+
+
+}
