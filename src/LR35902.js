@@ -289,5 +289,145 @@ jgb.LR35902 = function(memory){
         checkFlagZero(self.a)
       }
     }
+
+  this.opCodes[0x05] =
+    //DEC B
+    {
+      mnemonic: mnemonic("DEC B"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.b = (self.b - 1) & 0xFF
+        self.flagSubtract = 0x1
+        checkFlagHalfCarry(self.b)
+        checkFlagZero(self.b)
+      }
+    }
+
+  this.opCodes[0x15] =
+    //DEC D
+    {
+      mnemonic: mnemonic("DEC D"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.d = (self.d - 1) & 0xFF
+        self.flagSubtract = 0x1
+        checkFlagHalfCarry(self.d)
+        checkFlagZero(self.d)
+      }
+    }
+
+  this.opCodes[0x25] =
+    //DEC H
+    {
+      mnemonic: mnemonic("DEC H"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.h = (self.h - 1) & 0xFF
+        self.flagSubtract = 0x1
+        checkFlagHalfCarry(self.h)
+        checkFlagZero(self.h)
+      }
+    }
+
+  this.opCodes[0x35] =
+    //DEC (HL)
+    {
+      mnemonic: mnemonic("DEC (HL)"), jumpsTo: oneByte, cycles: cycles(12),
+      exec: function(){
+        var v = ((self.memory.readByte(self.bin.wordFrom(self.l, self.h)) - 1 ) & 0xFF)
+        self.memory.writeByte(self.bin.wordFrom(self.l, self.h), v)
+
+        self.flagSubtract = 0x1
+        checkFlagHalfCarry(v)
+        checkFlagZero(v)
+      }
+    }
+
+  this.opCodes[0x0D] =
+    //DEC C
+    {
+      mnemonic: mnemonic("DEC C"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.c = (self.c - 1) & 0xFF
+        self.flagSubtract = 0x1
+        checkFlagHalfCarry(self.c)
+        checkFlagZero(self.c)
+      }
+    }
+
+  this.opCodes[0x1D] =
+    //DEC E
+    {
+      mnemonic: mnemonic("DEC E"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.e = (self.e - 1) & 0xFF
+        self.flagSubtract = 0x1
+        checkFlagHalfCarry(self.e)
+        checkFlagZero(self.e)
+      }
+    }
+
+  this.opCodes[0x2D] =
+    //DEC L
+    {
+      mnemonic: mnemonic("DEC L"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.l = (self.l - 1) & 0xFF
+        self.flagSubtract = 0x1
+        checkFlagHalfCarry(self.l)
+        checkFlagZero(self.l)
+      }
+    }
+
+  this.opCodes[0x3D] =
+    //DEC A
+    {
+      mnemonic: mnemonic("DEC A"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.a = (self.a - 1) & 0xFF
+        self.flagSubtract = 0x1
+        checkFlagHalfCarry(self.a)
+        checkFlagZero(self.a)
+      }
+    }
+
+  this.opCodes[0x0B] =
+    //DEC BC
+    {
+      mnemonic: mnemonic("DEC BC"), jumpsTo: oneByte, cycles: cycles(8),
+      exec: function(){
+        var bc = (self.bin.wordFrom(self.c, self.b) - 1) & 0xFFFF
+        self.b = self.bin.firstByteFrom(bc)
+        self.c = self.bin.secondByteFrom(bc)
+      }
+    }
+
+  this.opCodes[0x1B] =
+    //DEC DE
+    {
+      mnemonic: mnemonic("DEC DE"), jumpsTo: oneByte, cycles: cycles(8),
+      exec: function(){
+        var de = (self.bin.wordFrom(self.e, self.d) - 1) & 0xFFFF
+        self.d = self.bin.firstByteFrom(de)
+        self.e = self.bin.secondByteFrom(de)
+      }
+    }
+
+  this.opCodes[0x2B] =
+    //DEC HL
+    {
+      mnemonic: mnemonic("DEC HL"), jumpsTo: oneByte, cycles: cycles(8),
+      exec: function(){
+        var hl = (self.bin.wordFrom(self.l, self.h) - 1) & 0xFFFF
+        self.h = self.bin.firstByteFrom(hl)
+        self.l = self.bin.secondByteFrom(hl)
+      }
+    }
+
+  this.opCodes[0x3B] =
+    //DEC SP
+    {
+      mnemonic: mnemonic("DEC SP"), jumpsTo: oneByte, cycles: cycles(8),
+      exec: function(){
+        self.sp = (self.sp - 1) & 0xFFFF
+      }
+    }
 }
 

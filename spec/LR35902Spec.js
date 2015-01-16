@@ -123,4 +123,14 @@ describe("LR35902", function() {
 
     expect(cpu.memory.readByte(0xC0AA)).toEqual(0x2);
   });
+
+  it("DEC B", function() {
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x05)
+    cpu.b = 0xAA
+
+    cpu.step()
+
+    expect(cpu.b).toEqual(0xA9);
+    expect(cpu.flagSubtract).toEqual(0x1);
+  });
 });
