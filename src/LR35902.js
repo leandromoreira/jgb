@@ -460,5 +460,29 @@ jgb.LR35902 = function(memory){
       }
     }
 
+  this.opCodes[0x07] =
+    //RLCA
+    {
+      mnemonic: mnemonic("RLCA"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.flagCarry = (self.a >> 7) & 0x1
+        self.a = ((self.a << 1) & 0xFF) | self.flagCarry
+        self.flagSubtract = self.flagHalfCarry = self.flagZero = 0
+      }
+    }
+  //RLA - apparently they're equals
+  this.opCodes[0x17] = this.opCodes[0x07]
 
+  this.opCodes[0x0F] =
+    //RRCA
+    {
+      mnemonic: mnemonic("RRCA"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.flagCarry = self.a  & 0x1
+        self.a = (self.a >> 1)|(self.flagCarry << 7)
+        self.flagSubtract = self.flagHalfCarry = self.flagZero = 0
+      }
+    }
+  //RRA
+  this.opCodes[0x1F] = this.opCodes[0x0F]
 }

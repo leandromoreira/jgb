@@ -175,4 +175,22 @@ describe("LR35902", function() {
 
     expect(cpu.memory.readByte(0xAA11)).toEqual(0xFA);
   });
+
+  it("RLCA", function() {
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x07)
+    cpu.a = 0x2 //10 << 1 == 100
+
+    cpu.step()
+
+    expect(cpu.a).toEqual(parseInt("100",2));
+  });
+
+  it("RRCA", function() {
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x0F)
+    cpu.a = 0x2 //10 >> 1 == 1
+
+    cpu.step()
+
+    expect(cpu.a).toEqual(1);
+  });
 });
