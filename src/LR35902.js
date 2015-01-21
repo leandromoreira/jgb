@@ -485,4 +485,35 @@ jgb.LR35902 = function(memory){
     }
   //RRA
   this.opCodes[0x1F] = this.opCodes[0x0F]
+
+  this.opCodes[0x27] =
+    //DAA
+    {
+      mnemonic: mnemonic("DAA"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.flagCarry = self.a  & 0x1
+        self.a = (self.a >> 1)|(self.flagCarry << 7)
+        self.flagSubtract = self.flagHalfCarry = self.flagZero = 0
+
+        if (self.flagSubtract !== 1){
+          if (self.flagCarry == 1 || self.a > 0x99){
+            self.a = (self.a + 0x60) & 0xFF
+            self.flagCarry = 1
+          }
+          if (self.flagHalfCarry == 1 || (self.a & 0xF) > 0x9 ){
+            self.a = (self.a + 0x6) & 0xFF
+            self.flagHalfCarry = 0
+          }
+        } else if (self.flagCarry == 1 && self.flagHalfCarry == 1){
+          self.a = (self.a + 0x9A) & 0xFF
+          self.flagHalfCarry = 0
+        } else if (self.flagCarry == 1){
+          self.a = (self.a + 0xA0) & 0xFF
+        } else if (self.flagHalfCarry == 1){
+          self.a = (self.a + 0xFA) & 0xFF
+          self.flagHalfCarry = 0
+        }
+        self.flagZero = (self.a == 0)
+      }
+    }
 }

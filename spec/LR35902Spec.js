@@ -193,4 +193,16 @@ describe("LR35902", function() {
 
     expect(cpu.a).toEqual(1);
   });
+
+  it("DAA", function() {
+    //flag ZNHC0000
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x27)
+    cpu.flagCarry = 1
+    cpu.flagHalfCarry = 1
+    cpu.a = 0xFA
+
+    cpu.step()
+
+    expect(cpu.a).toEqual(0x83);
+  });
 });
