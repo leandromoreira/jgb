@@ -230,4 +230,30 @@ describe("LR35902", function() {
 
     expect(cpu.memory.readWord(0xAAFF)).toEqual(0xCAFE);
   });
+
+  it("JR r8", function() {
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x18)
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0001, 0x1)
+
+    cpu.step()
+
+    expect(cpu.pc).toEqual(mmu.WRAM_BANK0_START+0x0002);
+  });
+
+  it("JR X,r8", function() {
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x28)
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0001, 0x1)
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0002, 0x28)
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0003, 0x2)
+
+    cpu.flagZero = 0
+    cpu.step()
+
+    expect(cpu.pc).toEqual(mmu.WRAM_BANK0_START+0x0002);
+
+    cpu.flagZero = 1
+    cpu.step()
+
+    expect(cpu.pc).toEqual(mmu.WRAM_BANK0_START+0x0005);
+  });
 });

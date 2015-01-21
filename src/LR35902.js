@@ -549,4 +549,45 @@ jgb.LR35902 = function(memory){
         self.memory.writeByte(nextWord, self.a)
       }
     }
+
+  this.opCodes[0x18] =
+    //JR r8
+    {
+      mnemonic: function(){return "JR "+this.arg}, jumpsTo: function(){return this.jump}, cycles: cycles(12),
+      exec: function(){
+        this.arg = self.memory.readByte(self.pc+1)
+        var signal = this.arg >> 7
+        var value = this.arg & 0x7F
+        //signed value
+        this.arg = (signal == 1)? -value : value
+        this.jump = this.arg + 1
+      }
+    }
+
+  var jumpInstructions = [
+    {opcode: 0x28, flag: "flagZero", expected: 1, pre: "Z"},
+    {opcode: 0x38, flag: "flagCarry", expected: 1, pre: "C"},
+    {opcode: 0x20, flag: "flagZero", expected: 0, pre: "NZ"},
+    {opcode: 0x30, flag: "flagCarry", expected: 0, pre: "NC"}
+  ]
+
+  for (var index = 0; index < jumpInstructions.length; ++index) {
+    (function(instruction){
+      self.opCodes[instruction.opcode] =
+        {
+          mnemonic: function(){return "JR "+instruction.pre+","+instruction.arg}, jumpsTo: function(){return instruction.jump}, cycles: cycles(12),
+          exec: function(){
+            instruction.arg = self.memory.readByte(self.pc+1)
+            var signal = instruction.arg >> 7
+            var value = instruction.arg & 0x7F
+            //signed value
+            instruction.arg = (signal == 1)? -value : value
+            if (self[instruction.flag] == instruction.expected){
+              instruction.jump = instruction.arg + 1
+            } else {
+              instruction.jump = 2
+            }
+          }
+        }})(jumpInstructions[index])
+  }
 }
