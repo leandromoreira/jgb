@@ -205,4 +205,17 @@ describe("LR35902", function() {
 
     expect(cpu.a).toEqual(0x83);
   });
+
+  it("SCF", function() {
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x37)
+    cpu.flagCarry = 0
+    cpu.flagHalfCarry = 1
+    cpu.flagSubtract = 1
+
+    cpu.step()
+
+    expect(cpu.flagCarry).toEqual(1);
+    expect(cpu.flagHalfCarry).toEqual(0);
+    expect(cpu.flagSubtract).toEqual(0);
+  });
 });

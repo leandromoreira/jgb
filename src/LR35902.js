@@ -516,4 +516,14 @@ jgb.LR35902 = function(memory){
         self.flagZero = (self.a == 0)
       }
     }
+
+  this.opCodes[0x37] =
+    //SCF
+    {
+      mnemonic: mnemonic("SCF"), jumpsTo: oneByte, cycles: cycles(4),
+      exec: function(){
+        self.flagCarry = 1
+        self.flagSubtract = self.flagHalfCarry = 0
+      }
+    }
 }
