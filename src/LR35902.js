@@ -526,4 +526,27 @@ jgb.LR35902 = function(memory){
         self.flagSubtract = self.flagHalfCarry = 0
       }
     }
+
+  this.opCodes[0x08] =
+    //LD (a16),SP
+    {
+      mnemonic: function(){return "LD ("+this.arg+"),SP"}, jumpsTo: threeBytes, cycles: cycles(20),
+      exec: function(){
+        var nextWord = self.bin.wordFrom(self.memory.readByte(self.pc+1), self.memory.readByte(self.pc+2))
+        this.arg = nextWord
+        self.memory.writeByte(nextWord, self.bin.secondByteFrom(self.sp))
+        self.memory.writeByte(nextWord+1, self.bin.firstByteFrom(self.sp))
+      }
+    }
+
+  this.opCodes[0xEA] =
+    //LD (a16),A
+    {
+      mnemonic: function(){return "LD ("+this.arg+"),A"}, jumpsTo: threeBytes, cycles: cycles(16),
+      exec: function(){
+        var nextWord = self.bin.wordFrom(self.memory.readByte(self.pc+1), self.memory.readByte(self.pc+2))
+        this.arg = nextWord
+        self.memory.writeByte(nextWord, self.a)
+      }
+    }
 }

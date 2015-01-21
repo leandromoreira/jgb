@@ -218,4 +218,16 @@ describe("LR35902", function() {
     expect(cpu.flagHalfCarry).toEqual(0);
     expect(cpu.flagSubtract).toEqual(0);
   });
+
+  it("LD (a16),SP", function() {
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x08)
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0001, 0xFF)
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0002, 0xAA)
+    cpu.memory.writeByte(0xAAFF, 0)
+    cpu.sp = 0xCAFE
+
+    cpu.step()
+
+    expect(cpu.memory.readWord(0xAAFF)).toEqual(0xCAFE);
+  });
 });
