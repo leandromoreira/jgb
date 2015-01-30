@@ -256,4 +256,17 @@ describe("LR35902", function() {
 
     expect(cpu.pc).toEqual(mmu.WRAM_BANK0_START+0x0005);
   });
+
+  it("ADD HL,BC", function() {
+    cpu.memory.writeByte(mmu.WRAM_BANK0_START+0x0000, 0x09)
+    cpu.h = 0x10
+    cpu.l = 0x00
+    cpu.b = 0x20
+    cpu.c = 0x00
+
+    cpu.step()
+
+    expect(cpu.h).toEqual(0x30);
+    expect(cpu.l).toEqual(0x00);
+  });
 });

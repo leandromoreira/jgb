@@ -590,4 +590,31 @@ jgb.LR35902 = function(memory){
           }
         }})(jumpInstructions[index])
   }
+
+  var addHLnInstruction = [
+    {opcode: 0x09, post: "bc"},
+    {opcode: 0x19, post: "de"},
+    {opcode: 0x29, post: "hl"},
+    {opcode: 0x39, post: "sp"}
+  ]
+
+  for (var index = 0; index < addHLnInstruction.length; ++index) {
+    (function(instruction){
+      self.opCodes[instruction.opcode] =
+        {
+          mnemonic: function(){return "ADD HL,"+instruction.post.toUpperCase()}, jumpsTo: oneByte, cycles: cycles(8),
+          exec: function(){
+            var hl = self.bin.wordFrom(self.l, self.h)
+            var n = self.bin.wordFrom(self[instruction.post.charAt(1)], self[instruction.post.charAt(0)])
+            hl = (hl + n)
+            self["flagCarry"] = (hl > 0xFFFF)? 0x1 : 0x0
+            self["flagHalfCarry"] = (hl & 0xFFFF == 0)? 0x1 : 0x0
+            self.flagSubtract = 0
+            checkFlagZero(hl)
+            hl = hl & 0xFFFF
+            self.h = self.bin.firstByteFrom(hl)
+            self.l = self.bin.secondByteFrom(hl)
+          }
+        }})(addHLnInstruction[index])
+  }
 }
